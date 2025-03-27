@@ -1,58 +1,77 @@
+// ========== EVENTO DE CARREGAMENTO ========== //
 // Carrega a lista do localStorage quando a página é carregada
 document.addEventListener("DOMContentLoaded", loadList);
 
-// Função principal para adicionar itens
+// ========== FUNÇÃO PRINCIPAL PARA ADICIONAR ITENS ========== //
 function addItem() {
   const input = document.getElementById("itemInput");
-  const itemText = input.value.trim();
+  const itemText = input.value.trim(); // Remove espaços no início e final
 
-  if (itemText) {
-    // Adiciona item na lista visual
-    const listItem = createListItem(itemText);
-    document.getElementById("shoppingList").appendChild(listItem);
-
-    // Salva no localStorage
-    saveToLocalStorage(itemText);
-
-    // Limpa o input
-    input.value = "";
+  // Validação 1: Verifica se o campo está vazio após remoção de espaços
+  if (!itemText) {
+    alert("Por favor, digite um item válido!");
+    return;
   }
+
+  // Validação 2: Impede a adição de itens contendo números
+  if (/\d/.test(itemText)) {
+    alert("Não são permitidos números nos itens!");
+    return;
+  }
+
+  // Validação 3: Verifica itens duplicados (case sensitive)
+  const existingItems = getItemsFromStorage();
+  if (existingItems.includes(itemText)) {
+    alert("Este item já está na lista!");
+    return;
+  }
+
+  // Adiciona o item validado na lista visual
+  const listItem = createListItem(itemText);
+  document.getElementById("shoppingList").appendChild(listItem);
+
+  // Salva no localStorage
+  saveToLocalStorage(itemText);
+
+  // Limpa o input após adição
+  input.value = "";
 }
 
-// Cria elemento de lista com botão de exclusão
+// ========== FUNÇÃO PARA CRIAR ELEMENTOS DA LISTA ========== //
 function createListItem(text) {
   const li = document.createElement("li");
   li.innerHTML = `
-        ${text}
-        <button class="delete-btn" onclick="deleteItem(this)">🗑️ Excluir</button>
-    `;
+    ${text}
+    <button class="delete-btn" onclick="deleteItem(this)">🗑️ Excluir</button>
+  `;
   return li;
 }
 
-// Exclui item individual
+// ========== FUNÇÃO PARA EXCLUIR ITEM INDIVIDUAL ========== //
 function deleteItem(button) {
   const li = button.parentElement;
   const itemText = li.firstChild.textContent.trim();
 
-  // Remove do DOM
+  // Remove visualmente do DOM
   li.remove();
 
-  // Remove do localStorage
+  // Remove do armazenamento local
   removeFromLocalStorage(itemText);
 }
 
-// Limpa toda a lista
+// ========== FUNÇÃO PARA LIMPAR TODA A LISTA ========== //
 function clearAll() {
+  // Confirmação de segurança antes de apagar
   if (confirm("Tem certeza que deseja limpar toda a lista?")) {
-    // Limpa visualmente
+    // Limpa visualização
     document.getElementById("shoppingList").innerHTML = "";
 
-    // Limpa localStorage
+    // Limpa armazenamento local
     localStorage.removeItem("shoppingList");
   }
 }
 
-// ========== Funções de LocalStorage ========== //
+// ========== FUNÇÕES DE GERENCIAMENTO DO LOCALSTORAGE ========== //
 
 // Salva novo item no localStorage
 function saveToLocalStorage(item) {
@@ -61,7 +80,7 @@ function saveToLocalStorage(item) {
   localStorage.setItem("shoppingList", JSON.stringify(items));
 }
 
-// Remove item do localStorage
+// Remove item específico do localStorage
 function removeFromLocalStorage(itemToRemove) {
   const items = getItemsFromStorage().filter((item) => item !== itemToRemove);
   localStorage.setItem("shoppingList", JSON.stringify(items));
@@ -72,12 +91,13 @@ function loadList() {
   const items = getItemsFromStorage();
   const list = document.getElementById("shoppingList");
 
+  // Recria todos os itens armazenados
   items.forEach((item) => {
     list.appendChild(createListItem(item));
   });
 }
 
-// Obtém itens do localStorage
+// Obtém lista atual do localStorage
 function getItemsFromStorage() {
   return JSON.parse(localStorage.getItem("shoppingList") || "[]");
 }

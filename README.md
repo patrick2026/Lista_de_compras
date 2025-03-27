@@ -6,6 +6,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=flat&logo=javascript&logoColor=black)
 
 Uma lista de compras moderna e responsiva, desenvolvida com as tecnologias fundamentais da web. **Projeto ideal para demonstrar habilidades front-end!**
+Entre no projeto https://patrick2026.github.io/Lista_de_compras/
 
 ## 🚀 Funcionalidades Principais
 

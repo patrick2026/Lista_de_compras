@@ -61,7 +61,9 @@ button:hover {
 
 .clear-all {
   background: #e74c3c;
+  width: 100%;
   margin-bottom: 15px;
+  display: block;
 }
 
 .clear-all:hover {
@@ -83,6 +85,7 @@ li {
   border-radius: 6px;
   animation: slideIn 0.3s ease;
   font-size: 0.95rem;
+  gap: 10px;
 }
 
 @keyframes slideIn {
@@ -100,26 +103,29 @@ li {
   background: #e74c3c;
   padding: 8px 12px;
   border-radius: 4px;
-  margin-left: 10px;
   font-size: 0.85rem;
   white-space: nowrap;
+  min-width: 70px;
 }
 
-/* Media Queries para Responsividade */
+/* Media Queries */
 @media (min-width: 480px) {
   .input-group {
     flex-direction: row;
   }
 
-  button {
+  input {
+    width: auto;
+    flex: 1;
+  }
+
+  button:not(.clear-all) {
     width: auto;
   }
 
   .clear-all {
-    width: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    width: calc(100% + 4px);
+    margin-left: -2px;
   }
 }
 
@@ -146,9 +152,48 @@ li {
     padding: 15px;
   }
 
+  .clear-all {
+    width: 100%;
+    margin-left: 0;
+  }
+
   .delete-btn {
     padding: 10px 15px;
     font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  li {
+    flex-wrap: wrap;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .delete-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 60px;
+    margin-left: auto;
+  }
+
+  .delete-btn:after {
+    content: "🗑️";
+  }
+}
+
+@media (max-width: 360px) {
+  .delete-btn {
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  .desktop-text {
+    display: none;
+  }
+
+  .mobile-text {
+    display: inline;
   }
 }
 
